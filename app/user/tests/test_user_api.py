@@ -135,11 +135,11 @@ class PrivateUserApiTest(TestCase):
         """The POST is not allowed for the me endpoint."""
         res = self.client.post(ME_URL)
 
-        self.assertEqual(res.status_code, status.HHTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_update_user_profile(self):
         """Test updating the user profile for the authenticated user."""
-        payload = {'name': ' Update name', 'password': 'newpassword123'}
+        payload = {'name': 'Updated name', 'password': 'newpassword123'}
 
         res = self.client.patch(ME_URL, payload)
 
@@ -147,4 +147,3 @@ class PrivateUserApiTest(TestCase):
         self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-
