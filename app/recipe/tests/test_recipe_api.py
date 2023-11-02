@@ -1,5 +1,5 @@
 """
-Test for recipe APIs.
+Tests for recipe APIs.
 """
 from decimal import Decimal
 
@@ -12,10 +12,18 @@ from rest_framework.test import APIClient
 
 from core.models import Recipe
 
-from recipe.serializers import RecipeSerializer
+from recipe.serializers import (
+    RecipeSerializer,
+    RecipeDetailSerializer
+)
 
 
 RECIPES_URL = reverse('recipe:recipe-list')
+
+
+def detail_url(recipe_id):
+    """Create and return a recipe detail URL."""
+    return reverse('recipe:recipe-detail', args=[recipe_id])
 
 
 def create_recipe(user, **params):
@@ -33,8 +41,8 @@ def create_recipe(user, **params):
     return recipe
 
 
-class PublicRecipeAPITests(TestCase):
-    """Test unauthenticated API resquests."""
+class PublicRecipeApiTests(TestCase):
+    """Test unauthenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
@@ -81,6 +89,16 @@ class PrivateRecipeAPITests(TestCase):
         res = self.client.get(RECIPES_URL)
 
         recipes = Recipe.objects.filter(user=self.user)
-        serializer = RecipeSerializer(recipes, manhy=True)
+        serializer = RecipeSerializer(recipes, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
+
+    def test_get_recipe_detail(self):
+        """Test get recipe detail."""
+        recipe = create_recipe(user=self.user)
+
+        url = detail_url(recipe.id)
+        res = self.client.get(url)
+
+        serializer = RecipeSerializer(recipe)
+        self.assertEqual(res.data, serializer,data)
