@@ -14,7 +14,7 @@ from core.models import Recipe
 
 from recipe.serializers import (
     RecipeSerializer,
-    RecipeDetailSerializer
+    RecipeDetailSerializer,
 )
 
 
@@ -60,7 +60,7 @@ class PublicRecipeAPITests(TestCase):
 
 
 class PrivateRecipeApiTests(TestCase):
-    """Test authenticated API request."""
+    """Test authenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
@@ -163,7 +163,7 @@ class PrivateRecipeApiTests(TestCase):
 
     def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error."""
-        new_user = create_user(email='user2@example.com', password='test23')
+        new_user = create_user(email='user2@example.com', password='test123')
         recipe = create_recipe(user=self.user)
 
         payload = {'user': new_user.id}
