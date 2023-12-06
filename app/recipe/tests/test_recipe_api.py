@@ -46,7 +46,7 @@ def create_user(**params):
     return get_user_model().objects.create_user(**params)
 
 
-class PublicRecipeApiTests(TestCase):
+class PublicRecipeAPITests(TestCase):
     """Test unauthenticated API requests."""
 
     def setUp(self):
@@ -59,7 +59,7 @@ class PublicRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class PrivateRecipeAPITests(TestCase):
+class PrivateRecipeApiTests(TestCase):
     """Test authenticated API request."""
 
     def setUp(self):
@@ -137,12 +137,12 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(recipe.user, self.user)
 
     def test_full_update(self):
-        """Test full update of recipe"""
+        """Test full update of recipe."""
         recipe = create_recipe(
             user=self.user,
             title='Sample recipe title',
-            link='https://example.com/recipe.pdf',
-            description='Sample recipe description',
+            link='https://exmaple.com/recipe.pdf',
+            description='Sample recipe description.',
         )
 
         payload = {
@@ -163,7 +163,7 @@ class PrivateRecipeAPITests(TestCase):
 
     def test_update_user_returns_error(self):
         """Test changing the recipe user results in an error."""
-        new_user = create_user(email='user2@examle.com', password='test23')
+        new_user = create_user(email='user2@example.com', password='test23')
         recipe = create_recipe(user=self.user)
 
         payload = {'user': new_user.id}
@@ -183,9 +183,9 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Recipe.objects.filter(id=recipe.id).exists())
 
-    def test_delete_other_user_recipe_error(self):
-        """Test trying to delete another users recipe give error."""
-        new_user = create_user(email='user2@emaple.com', password='test123')
+    def test_recipe_other_users_recipe_error(self):
+        """Test trying to delete another users recipe gives error."""
+        new_user = create_user(email='user2@example.com', password='test123')
         recipe = create_recipe(user=new_user)
 
         url = detail_url(recipe.id)
