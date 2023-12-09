@@ -1,5 +1,5 @@
 """
-Tests for th ingredients API.
+Tests for the ingredients API.
 """
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -18,24 +18,24 @@ INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return user."""
-    return get_user_model().objects.create_user(emial=email, password=password)
+    return get_user_model().objects.create_user(email=email, password=password)
 
 
-class PublicIngredientesApiTests(TestCase):
-    """Test unauthenticated API request."""
+class PublicIngredientsApiTests(TestCase):
+    """Test unauthenticated API requests."""
 
     def setUp(self):
         self.client = APIClient()
 
     def test_auth_required(self):
-        """"Test auth is requiered for retrieving ingredients."""
+        """Test auth is required for retrieving ingredients."""
         res = self.client.get(INGREDIENTS_URL)
 
-        res = self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PrivateIngredientsApiTests(TestCase):
-    """Test unauthenticated API requests."""
+    """Test authenticated API requests."""
 
     def setUp(self):
         self.user = create_user()
@@ -54,8 +54,8 @@ class PrivateIngredientsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    def test_ingrediets_limited_to_user(self):
-        """Test listo of ingredients is limited to authenticated user."""
+    def test_ingredients_limited_to_user(self):
+        """Test list of ingredients is limited to authenticated user."""
         user2 = create_user(email='user2@example.com')
         Ingredient.objects.create(user=user2, name='Salt')
         ingredient = Ingredient.objects.create(user=self.user, name='Pepper')
