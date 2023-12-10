@@ -387,7 +387,7 @@ class PrivateRecipeApiTests(TestCase):
         tag2 = Tag.objects.create(user=self.user, name='Vegetarian')
         r1.tags.add(tag1)
         r2.tags.add(tag2)
-        r3 = create_recipe(user=self.user, title='Fish and Ships')
+        r3 = create_recipe(user=self.user, title='Fish and Chips')
 
         params = {'tags': f'{tag1.id},{tag2.id}'}
         res = self.client.get(RECIPES_URL, params)
