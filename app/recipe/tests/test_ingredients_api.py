@@ -100,8 +100,8 @@ class PrivateIngredientsApiTests(TestCase):
         ingredients = Ingredient.objects.filter(user=self.user)
         self.assertFalse(ingredients.exists())
 
-    def test_filter_ingredientes_assigned_to_recipes(self):
-        """Test listing ingredients by those assigned to recipes."""
+    def test_filter_ingredients_assigned_to_recipes(self):
+        """Test listing ingedients to those assigned to recipes."""
         in1 = Ingredient.objects.create(user=self.user, name='Apples')
         in2 = Ingredient.objects.create(user=self.user, name='Turkey')
         recipe = Recipe.objects.create(
@@ -117,11 +117,11 @@ class PrivateIngredientsApiTests(TestCase):
         s1 = IngredientSerializer(in1)
         s2 = IngredientSerializer(in2)
         self.assertIn(s1.data, res.data)
-        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s2.data, res.data)
 
     def test_filtered_ingredients_unique(self):
         """Test filtered ingedients returns a unique list."""
-        ing = Ingredient.objects.create(user=self.user, name='Egss')
+        ing = Ingredient.objects.create(user=self.user, name='Eggs')
         Ingredient.objects.create(user=self.user, name='Lentils')
         recipe1 = Recipe.objects.create(
             title='Eggs Benedict',
